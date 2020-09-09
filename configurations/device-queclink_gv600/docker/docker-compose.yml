@@ -1,0 +1,15 @@
+version: '2'
+services:
+ queclink600:
+    build:
+      context: ./current
+      dockerfile: Dockerfile
+    ports:
+      - "0.0.0.0:6071/tcp:6071/tcp"
+      - "0.0.0.0:6068/udp:6068/udp"
+    volumes:
+      - ./config:/config
+      - ./logs:/app/logs
+    tty: true
+    restart: always
+    network_mode: "bridge"

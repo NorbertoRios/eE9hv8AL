@@ -1,0 +1,540 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is device-service exaple API.",
+        "title": "Device-service swagger example API",
+        "contact": {},
+        "license": {},
+        "version": "1.0"
+    },
+    "basePath": "/",
+    "paths": {
+        "/device/command": {
+            "post": {
+                "description": "Enqueue command to device",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "device"
+                ],
+                "summary": "Send command to device",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "identity",
+                        "name": "identity",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "command",
+                        "name": "command",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "callback_id",
+                        "name": "callback_id",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ttl",
+                        "name": "ttl",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/device/directcommand": {
+            "post": {
+                "description": "Send packet to IP:port",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "device"
+                ],
+                "summary": "Send command to IP and port using UDP protocol",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ip",
+                        "name": "ip",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "port",
+                        "name": "port",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "command",
+                        "name": "command",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/device/identity_exists": {
+            "get": {
+                "description": "Checks device by device identity",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "device"
+                ],
+                "summary": "Checks device is currently connected to service",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "identity",
+                        "name": "identity",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/device/immobilizer": {
+            "get": {
+                "description": "Returns immobilizer command",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "device"
+                ],
+                "summary": "Get immobilizer command",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "identity",
+                        "name": "identity",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "port",
+                        "name": "port",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "state",
+                        "name": "state",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "trigger",
+                        "name": "trigger",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Enqueue immobilizer state change request to device",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "device"
+                ],
+                "summary": "Send immobilizer state change request",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "identity",
+                        "name": "identity",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "callback_id",
+                        "name": "callback_id",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ttl",
+                        "name": "ttl",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "port",
+                        "name": "port",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "state",
+                        "name": "state",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "trigger",
+                        "name": "trigger",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "safety_option",
+                        "name": "safety_option",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/device/locate": {
+            "get": {
+                "description": "Returns locate command",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "device"
+                ],
+                "summary": "Get locate command",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "identity",
+                        "name": "identity",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Enqueue location request to device",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "device"
+                ],
+                "summary": "Send locate request",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "identity",
+                        "name": "identity",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "callback_id",
+                        "name": "callback_id",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ttl",
+                        "name": "ttl",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/device/stats": {
+            "get": {
+                "description": "Returns service statistics",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "device"
+                ],
+                "summary": "Get service statistics",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.ServiceStatistics"
+                        }
+                    }
+                }
+            }
+        },
+        "/device/update_config": {
+            "post": {
+                "description": "Enqueue configuration to device",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "device"
+                ],
+                "summary": "Send configuration to device",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "identity",
+                        "name": "identity",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "source",
+                        "name": "source",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "array",
+                        "description": "trigger",
+                        "name": "config",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "safety_option",
+                        "name": "safety_option",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Response"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.Response": {
+            "type": "object",
+            "properties": {
+                "CallbackId": {
+                    "type": "string",
+                    "example": "1a3bf03d930d46adba3ee9f20fc50508"
+                },
+                "Code": {
+                    "type": "string",
+                    "example": "Device is offline"
+                },
+                "Comment": {
+                    "type": "string",
+                    "example": "Response description"
+                },
+                "CreatedAt": {
+                    "type": "string",
+                    "example": "2018-05-09T01:02:03Z"
+                },
+                "ExecutedCommand": {
+                    "type": "string",
+                    "example": "TRACK,0#"
+                },
+                "Success": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        },
+        "model.ServiceStatistics": {
+            "type": "object",
+            "properties": {
+                "processInfo": {
+                    "type": "string"
+                },
+                "tcpconnectionsCount": {
+                    "type": "integer"
+                },
+                "totalCountByWorkers": {
+                    "type": "integer"
+                },
+                "totalDeviceCount": {
+                    "type": "integer"
+                },
+                "udpconnectionsCount": {
+                    "type": "integer"
+                },
+                "unregisteredConnectionsCount": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}

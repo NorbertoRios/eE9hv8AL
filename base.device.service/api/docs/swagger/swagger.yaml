@@ -1,0 +1,371 @@
+basePath: /
+definitions:
+  model.Response:
+    properties:
+      CallbackId:
+        example: 1a3bf03d930d46adba3ee9f20fc50508
+        type: string
+      Code:
+        example: Device is offline
+        type: string
+      Comment:
+        example: Response description
+        type: string
+      CreatedAt:
+        example: "2018-05-09T01:02:03Z"
+        type: string
+      ExecutedCommand:
+        example: TRACK,0#
+        type: string
+      Success:
+        example: true
+        type: boolean
+    type: object
+  model.ServiceStatistics:
+    properties:
+      processInfo:
+        type: string
+      tcpconnectionsCount:
+        type: integer
+      totalCountByWorkers:
+        type: integer
+      totalDeviceCount:
+        type: integer
+      udpconnectionsCount:
+        type: integer
+      unregisteredConnectionsCount:
+        type: integer
+    type: object
+info:
+  contact: {}
+  description: This is device-service exaple API.
+  license: {}
+  title: Device-service swagger example API
+  version: "1.0"
+paths:
+  /device/command:
+    post:
+      consumes:
+      - application/json
+      description: Enqueue command to device
+      parameters:
+      - description: identity
+        in: formData
+        name: identity
+        required: true
+        type: string
+      - description: command
+        in: formData
+        name: command
+        required: true
+        type: string
+      - description: callback_id
+        in: formData
+        name: callback_id
+        required: true
+        type: string
+      - description: ttl
+        in: formData
+        name: ttl
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "302":
+          description: Found
+          schema:
+            $ref: '#/definitions/model.Response'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.Response'
+            type: object
+      summary: Send command to device
+      tags:
+      - device
+  /device/directcommand:
+    post:
+      consumes:
+      - application/json
+      description: Send packet to IP:port
+      parameters:
+      - description: ip
+        in: formData
+        name: ip
+        required: true
+        type: string
+      - description: port
+        in: formData
+        name: port
+        required: true
+        type: integer
+      - description: command
+        in: formData
+        name: command
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Response'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.Response'
+            type: object
+      summary: Send command to IP and port using UDP protocol
+      tags:
+      - device
+  /device/identity_exists:
+    get:
+      consumes:
+      - application/json
+      description: Checks device by device identity
+      parameters:
+      - description: identity
+        in: query
+        name: identity
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "302":
+          description: Found
+          schema:
+            $ref: '#/definitions/model.Response'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.Response'
+            type: object
+      summary: Checks device is currently connected to service
+      tags:
+      - device
+  /device/immobilizer:
+    get:
+      consumes:
+      - application/json
+      description: Returns immobilizer command
+      parameters:
+      - description: identity
+        in: query
+        name: identity
+        required: true
+        type: string
+      - description: port
+        in: query
+        name: port
+        required: true
+        type: string
+      - description: state
+        in: query
+        name: state
+        required: true
+        type: string
+      - description: trigger
+        in: query
+        name: trigger
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "302":
+          description: Found
+          schema:
+            $ref: '#/definitions/model.Response'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.Response'
+            type: object
+      summary: Get immobilizer command
+      tags:
+      - device
+    post:
+      consumes:
+      - multipart/form-data
+      description: Enqueue immobilizer state change request to device
+      parameters:
+      - description: identity
+        in: formData
+        name: identity
+        required: true
+        type: string
+      - description: callback_id
+        in: formData
+        name: callback_id
+        required: true
+        type: string
+      - description: ttl
+        in: formData
+        name: ttl
+        required: true
+        type: integer
+      - description: port
+        in: formData
+        name: port
+        required: true
+        type: string
+      - description: state
+        in: formData
+        name: state
+        required: true
+        type: string
+      - description: trigger
+        in: formData
+        name: trigger
+        required: true
+        type: string
+      - description: safety_option
+        in: formData
+        name: safety_option
+        required: true
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "302":
+          description: Found
+          schema:
+            $ref: '#/definitions/model.Response'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.Response'
+            type: object
+      summary: Send immobilizer state change request
+      tags:
+      - device
+  /device/locate:
+    get:
+      consumes:
+      - application/json
+      description: Returns locate command
+      parameters:
+      - description: identity
+        in: query
+        name: identity
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "302":
+          description: Found
+          schema:
+            $ref: '#/definitions/model.Response'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.Response'
+            type: object
+      summary: Get locate command
+      tags:
+      - device
+    post:
+      consumes:
+      - multipart/form-data
+      description: Enqueue location request to device
+      parameters:
+      - description: identity
+        in: formData
+        name: identity
+        required: true
+        type: string
+      - description: callback_id
+        in: formData
+        name: callback_id
+        required: true
+        type: string
+      - description: ttl
+        in: formData
+        name: ttl
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "302":
+          description: Found
+          schema:
+            $ref: '#/definitions/model.Response'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.Response'
+            type: object
+      summary: Send locate request
+      tags:
+      - device
+  /device/stats:
+    get:
+      consumes:
+      - application/json
+      description: Returns service statistics
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ServiceStatistics'
+            type: object
+      summary: Get service statistics
+      tags:
+      - device
+  /device/update_config:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Enqueue configuration to device
+      parameters:
+      - description: identity
+        in: formData
+        name: identity
+        required: true
+        type: string
+      - description: source
+        in: formData
+        name: source
+        required: true
+        type: integer
+      - description: trigger
+        in: formData
+        name: config
+        required: true
+        type: array
+      - description: safety_option
+        in: formData
+        name: safety_option
+        required: true
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Response'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.Response'
+            type: object
+      summary: Send configuration to device
+      tags:
+      - device
+swagger: "2.0"
