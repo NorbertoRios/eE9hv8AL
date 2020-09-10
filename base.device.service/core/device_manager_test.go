@@ -9,10 +9,10 @@ import (
 )
 
 func TestDeviceManagerEmbedding(t *testing.T) {
-	config.Initialize("../config/credentials.json", &config.Configuration{})
+	config.Initialize("..", "/credentials.json")
 	instance := &ExtendedDM{}
-	instance.DeviceManager.InitializeDevice = instance.InitializeDevice
-	instance.DeviceManager.InitializeUDPDevice = instance.InitializeUDPDevice
+	instance.DeviceManager.InitializeDeviceCallback = instance.InitializeDeviceCallback
+	instance.DeviceManager.InitializeUDPDeviceCallback = instance.InitializeUDPDeviceCallback
 	InitializeDeviceManager(instance)
 	d, err := InstanceDM.InitializeUDPDevice(&comm.UDPChannel{}, &report.Message{})
 	if err != nil {

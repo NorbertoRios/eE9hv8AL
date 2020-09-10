@@ -6,7 +6,7 @@ import (
 
 func TestConfigurationFind(t *testing.T) {
 	config := &ReportConfiguration{}
-	LoadReportConfiguration("ReportConfiguration.xml", config)
+	LoadReportConfiguration("..", "/ReportConfiguration.xml", config)
 	report, err := config.Find(47, "+RSP", 5)
 	if err != nil {
 		t.Error("[TestConfigurationFind]Error retrive report configuration")
@@ -18,7 +18,7 @@ func TestConfigurationFind(t *testing.T) {
 
 func TestConfigurationNotFound(t *testing.T) {
 	config := &ReportConfiguration{}
-	LoadReportConfiguration("ReportConfiguration.xml", config)
+	LoadReportConfiguration("..", "/ReportConfiguration.xml", config)
 	report, err := config.Find(16, "+RSP", 125)
 	if err == nil {
 		t.Error("[TestConfigurationFind]Error retrive report configuration")
@@ -30,7 +30,7 @@ func TestConfigurationNotFound(t *testing.T) {
 
 func TestConfigurationLastLocationAttr(t *testing.T) {
 	config := &ReportConfiguration{}
-	LoadReportConfiguration("ReportConfiguration.xml", config)
+	LoadReportConfiguration("..", "/ReportConfiguration.xml", config)
 	report, _ := config.Find(47, "+EVT", 21)
 	it, found := report.GetType(21)
 	if !found {

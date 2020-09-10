@@ -1,9 +1,11 @@
 package config
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestDeviceConfigurationLoad(t *testing.T) {
-	err := Initialize("credentials.json", &Configuration{})
+	err := Initialize("..", "/credentials.json")
 	if err != nil {
 		t.Error("Error load configuration:", err.Error())
 	}
@@ -18,8 +20,7 @@ func TestInvalidConfigurationLoad(t *testing.T) {
 
 		}
 	}()
-
-	err := Initialize("qwerty.json", &Configuration{})
+	err := Initialize("..", "/credentials.json")
 	if err != nil {
 		t.Error("Error load configuration:", err.Error())
 	}
@@ -31,7 +32,7 @@ type ExtendedConfiguration struct {
 }
 
 func TestAccessViaParent(t *testing.T) {
-	err := Initialize("credentials.json", &ExtendedConfiguration{})
+	err := Initialize("..", "/credentials.json")
 	if err != nil {
 		t.Error("Error load configuration:", err.Error())
 	}

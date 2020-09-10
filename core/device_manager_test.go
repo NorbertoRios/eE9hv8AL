@@ -10,10 +10,10 @@ import (
 )
 
 func TestDeviceManagerEmbedding(t *testing.T) {
-	config.Initialize("../service/credentials.json", &config.Configuration{})
+	config.Initialize("..", "/credentials.json")
 	instance := &ExtendedDM{}
-	instance.DeviceManager.InitializeDeviceCallback = instance.InitializeDevice
-	instance.DeviceManager.InitializeUDPDeviceCallback = instance.InitializeUDPDevice
+	instance.DeviceManager.InitializeDeviceCallback = instance.InitializeDeviceCallback
+	instance.DeviceManager.InitializeUDPDeviceCallback = instance.InitializeUDPDeviceCallback
 
 	core.InitializeDeviceManager(instance)
 

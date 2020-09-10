@@ -14,7 +14,6 @@ import (
 	"queclink-go/base.device.service/core/immobilizer"
 	"queclink-go/base.device.service/report"
 	"queclink-go/base.device.service/utils"
-	"queclink-go/qconfig"
 )
 
 const (
@@ -341,7 +340,7 @@ func GetOutputArray(currentStates *StatesResponse) []byte {
 //GetFacadeOutputsState returns response from facade with outputs
 func GetFacadeOutputsState(identity string) (*StatesResponse, error) {
 	outStatuses := &StatesResponse{}
-	resp, err := http.Get(fmt.Sprintf("%v/device/analytics/service_immobilizer_states?identity=%v", config.Config.(*qconfig.QConfiguration).DeviceFacadeHost, identity))
+	resp, err := http.Get(fmt.Sprintf("%v/device/analytics/service_immobilizer_states?identity=%v", config.Config.GetBase().DeviceFacadeHost, identity))
 	if err != nil {
 		return outStatuses, fmt.Errorf("[Immobilizer]GetFacadeOutputsState. Error response. Error:%v; ", err.Error())
 	}
