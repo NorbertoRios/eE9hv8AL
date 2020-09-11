@@ -3,7 +3,6 @@ module queclink-go
 go 1.13
 
 require (
-	bitbucket.org/positrace/base.device.service/src v0.0.0-20200324103338-3417610cf3b0
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/gin-contrib/pprof v1.3.0
 	github.com/gin-gonic/gin v1.6.3
