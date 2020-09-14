@@ -73,7 +73,7 @@ func (service *Base) Initialize() {
 	log.Println("Started web API server on:", service.APIServer.Port)
 	service.UDPServer1 = comm.NewUDPServer(config.Config.GetBase().UDPHost1, config.Config.GetBase().UDPPort)
 	service.UDPServer1.OnPacket(service.DeviceManager.OnUDPPacket)
-	service.UDPServer2 = comm.NewUDPServer(config.Config.GetBase().UDPHost2, 10065)
+	service.UDPServer2 = comm.NewUDPServer(config.Config.GetBase().UDPHost2, config.Config.GetBase().UDPPort)
 	service.UDPServer2.OnPacket(service.DeviceManager.OnUDPPacket)
 	service.TCPServer = comm.NewTCPServer("", config.Config.GetBase().TCPPort)
 	service.TCPServer.OnNewClient(service.DeviceManager.ReceivedNewConnection)
