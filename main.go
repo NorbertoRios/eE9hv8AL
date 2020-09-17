@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -21,30 +22,32 @@ func buildReportConfiguration() {
 }
 
 func buildCredentialsConfiguration() {
-	if err := config.Initialize(os.Args[0], "/config/initializer/credentials.json"); err != nil {
+	if err := config.Initialize(os.Args[0], "/config/initializer/credentials.example.json"); err != nil {
 		panic("Error while credentials config initializing: " + err.Error())
 	}
 }
 
-func initializeDeviceManagerCallbacks(manager core.IDeviceManager) core.IDeviceManager {
-	switch manager.(type) {
-	case *qcore.QueclinkDM:
+func initializeDeviceManager(service string) core.IDeviceManager {
+	switch service {
+	case "gv55":
 		{
-			dm, _ := manager.(*qcore.QueclinkDM)
+			dm := &qcore.QueclinkDM{}
 			dm.DeviceManager.InitializeUDPDeviceCallback = dm.InitializeUDPDevice
 			dm.DeviceManager.InitializeDeviceCallback = dm.InitializeDevice
+			log.Println("GV55 device manager initialized")
 			return dm
 		}
-	case *qcore.Queclink600DM:
+	case "gv600":
 		{
-			dm, _ := manager.(*qcore.Queclink600DM)
+			dm := &qcore.Queclink600DM{}
 			dm.DeviceManager.InitializeUDPDeviceCallback = dm.InitializeUDPDevice
 			dm.DeviceManager.InitializeDeviceCallback = dm.InitializeDevice
+			log.Println("GV600 device manager initialized")
 			return dm
 		}
 	default:
 		{
-			panic("Unexpected device manager type")
+			panic(fmt.Sprintf("Unexpected device manager type %v", service))
 		}
 	}
 }
@@ -54,26 +57,7 @@ func buildServiceInstance() *service.Base {
 	buildReportConfiguration()
 	serviceInstance := &service.Base{}
 	service.InitializeInstance(serviceInstance)
-	var dm core.IDeviceManager
-	serviceName := config.Config.GetBase().Service
-	switch serviceName {
-	case "gv55":
-		{
-			dm = &qcore.QueclinkDM{}
-		}
-	case "gv600":
-		{
-			dm = &qcore.Queclink600DM{}
-		}
-	default:
-		{
-			panic("Unexpected service type: " + serviceName)
-		}
-	}
-	if dm == nil {
-		panic("Device manager is nil")
-	}
-	manager := initializeDeviceManagerCallbacks(dm)
+	manager := initializeDeviceManager(config.Config.GetBase().Service)
 	serviceInstance.ConfigureDeviceManager(manager).
 		ConfigureParser(&queclinkreport.Parser{}).
 		ConfigureApi(&qcontroller.QController{}).
