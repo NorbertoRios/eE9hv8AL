@@ -22,7 +22,7 @@ func buildReportConfiguration() {
 }
 
 func buildCredentialsConfiguration() {
-	if err := config.Initialize(os.Args[0], "/config/initializer/credentials.example.json"); err != nil {
+	if err := config.Initialize(os.Args[0], "/config/initializer/credentials.json"); err != nil {
 		panic("Error while credentials config initializing: " + err.Error())
 	}
 }
