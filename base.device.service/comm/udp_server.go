@@ -21,8 +21,7 @@ func (server *UDPServer) Listen() {
 		if err != nil {
 			log.Fatalf("Error Reading from udp connection:%v", err.Error())
 			return
-		}
-		log.Println("[Debug] ", server.Port)
+		}		
 		ServerCounters.AddFloat("Received", float64(n))
 		server.onPacket(server, addr, buf[0:n])
 	}
