@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"strings"
 
-	"queclink-go/base.device.service/report"
-	"queclink-go/base.device.service/utils"
 	"queclink-go/queclinkreport/devicetypes"
 	"queclink-go/queclinkreport/gv300/resp300"
+
+	"queclink-go/base.device.service/report"
+	"queclink-go/base.device.service/utils"
 )
 
 const (
