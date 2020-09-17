@@ -54,9 +54,15 @@ type DeviceManager struct {
 }
 
 func (manager *DeviceManager) InitializeDevice(c comm.IChannel, message report.IMessage) (IDevice, error) {
+	if manager.InitializeDeviceCallback == nil {
+		log.Println("[DEBUG] InitializeDevice is nil")
+	}
 	return manager.InitializeDeviceCallback(c, message)
 }
 func (manager *DeviceManager) InitializeUDPDevice(c comm.IChannel, message report.IMessage) (IDevice, error) {
+	if manager.InitializeUDPDeviceCallback == nil {
+		log.Println("[DEBUG] InitializeDevice is nil")
+	}
 	return manager.InitializeUDPDeviceCallback(c, message)
 }
 
@@ -108,6 +114,7 @@ func (manager *DeviceManager) OnUDPPacket(server *comm.UDPServer, addr *net.UDPA
 	ts := time.Now()
 	log.Println("Received UDP packet:", utils.InsertNth(utils.ByteToString(packet), 2, ' '), "from:", addr.String())
 	messages, err := manager.Parser.Parse(packet)
+	log.Println("[Debug] Parsed")
 	if err != nil || messages == nil || len(messages) == 0 {
 		ack := manager.Parser.GetUnknownAck(packet)
 		if ack != nil && len(ack) > 0 {
@@ -131,6 +138,7 @@ func (manager *DeviceManager) OnUDPPacket(server *comm.UDPServer, addr *net.UDPA
 			server.SendBytes(addr, ack.([]byte))
 		}
 		manager.PrasingWorkers.Signalize(data)
+		log.Println("[Debug] Signalized")
 	}
 	log.Println("[OnUDPPacket] Processing time : ", fmt.Sprint(time.Since(ts)))
 }
@@ -181,6 +189,7 @@ func (manager *DeviceManager) Initialize() {
 	manager.ManagedConnections = newManagedConnection()
 	manager.DeviceWorkers = InitializeWorkers(config.Config.GetBase().WorkersCount)
 	manager.PrasingWorkers = BuildParsingWorkers(config.Config.GetBase().ParsingWorkersCount, manager)
+	log.Println("[Debug] DM initialized")
 	go func() {
 		managedticker := time.NewTicker(300 * time.Second)
 		ticker := time.NewTicker(5 * time.Second)
