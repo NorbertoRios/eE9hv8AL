@@ -126,10 +126,10 @@ func (manager *DeviceManager) OnUDPPacket(server *comm.UDPServer, addr *net.UDPA
 			Message: message,
 			DevID:   devID.(string),
 		}
-		ack, found := message.GetValue("Ack")
-		if found {
-			server.SendBytes(addr, ack.([]byte))
-		}
+		// ack, found := message.GetValue("Ack")
+		// if found {
+		// 	server.SendBytes(addr, ack.([]byte))
+		// }
 		manager.PrasingWorkers.Signalize(data)
 	}
 	log.Println("[OnUDPPacket] Processing time : ", fmt.Sprint(time.Since(ts)))

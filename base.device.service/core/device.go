@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"queclink-go/base.device.service/rabbit"
 	"github.com/streadway/amqp"
+	"queclink-go/base.device.service/rabbit"
 
 	"queclink-go/base.device.service/config"
 	"queclink-go/base.device.service/report"
@@ -381,14 +381,20 @@ func (device *Device) PublishMessage(message report.IMessage) error {
 	}
 
 	message.SetValue("PrevSourceId", device.Activity.LastMessageID)
-
-	if herr := device.saveMessageHistory(message); herr != nil {
+	herr := device.saveMessageHistory(message)
+	aerr := device.Self.SaveActivity(message)
+	if herr != nil || aerr != nil {
+		log.Fatalf("[PublishMessage | Save history] Error : %v ", herr)
 		return herr
 	}
-	if aerr := device.Self.SaveActivity(message); aerr != nil {
+	if aerr != nil {
+		log.Fatalf("[PublishMessage | Save activity] Error : %v ", aerr)
 		return aerr
 	}
 	device.Self.SendSystemMessage(message, models.GetMessageHistoryTableName(device.Identity))
+	if ack, found := message.GetValue("Ack"); found {
+		device.GetChannel().SendBytes(ack.([]byte))
+	}
 	return nil
 }
 

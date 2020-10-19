@@ -49,7 +49,7 @@ func (c *UDPChannel) Send(message string) error {
 func (c *UDPChannel) SendBytes(message []byte) error {
 	count, err := c.Server.SendBytes(c.ClientAddr, message)
 	c.Transmitted += int64(count)
-	log.Println("[SendBytes] ", string(message))
+	log.Println("[SendBytes] ", string(message), "Sended to ", c.ClientAddr.String())
 	return err
 }
 
