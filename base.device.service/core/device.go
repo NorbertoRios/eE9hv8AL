@@ -392,9 +392,6 @@ func (device *Device) PublishMessage(message report.IMessage) error {
 		return aerr
 	}
 	device.Self.SendSystemMessage(message, models.GetMessageHistoryTableName(device.Identity))
-	if ack, found := message.GetValue("Ack"); found {
-		device.GetChannel().SendBytes(ack.([]byte))
-	}
 	return nil
 }
 
