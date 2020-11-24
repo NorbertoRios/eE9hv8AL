@@ -7,8 +7,6 @@ import (
 
 	"queclink-go/base.device.service/utils"
 
-	"github.com/mitchellh/panicwrap"
-	lumberjack "gopkg.in/natefinch/lumberjack.v2"
 	"queclink-go/base.device.service/api"
 	"queclink-go/base.device.service/api/controller"
 	_ "queclink-go/base.device.service/api/docs"
@@ -18,6 +16,9 @@ import (
 	"queclink-go/base.device.service/core/models"
 	"queclink-go/base.device.service/rabbit"
 	"queclink-go/base.device.service/report"
+
+	"github.com/mitchellh/panicwrap"
+	lumberjack "gopkg.in/natefinch/lumberjack.v2"
 )
 
 //Instance of device manager
@@ -57,8 +58,7 @@ func InitializeInstance(instance IService) {
 
 //Initialize service
 func (service *Base) Initialize() {
-	models.InitializeConnections(config.Config.GetBase().MysqDeviceMasterConnectionString,
-		config.Config.GetBase().LoggerServerMode)
+	models.InitializeConnections(config.Config.GetBase().MysqDeviceMasterConnectionString)
 	rabbit.InitializeRabbitConnection(&rabbit.Credentials{
 		Host:     config.Config.GetBase().Rabbit.Host,
 		Port:     config.Config.GetBase().Rabbit.Port,

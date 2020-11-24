@@ -16,4 +16,7 @@ require (
 	github.com/swaggo/swag v1.6.7
 	github.com/tkanos/gonfig v0.0.0-20181112185242-896f3d81fadf
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
+	gorm.io/driver/mysql v1.0.3
+	gorm.io/driver/sqlite v1.1.3 // indirect
+	gorm.io/gorm v1.20.7
 )

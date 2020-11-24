@@ -1,10 +1,13 @@
 package models
 
 import (
+	"errors"
 	"log"
 	"time"
 
 	"queclink-go/base.device.service/utils"
+
+	"gorm.io/gorm"
 )
 
 //DeviceConfig struct for device configuration
@@ -24,7 +27,7 @@ func (DeviceConfig) TableName() string {
 
 //Save device state cache to database
 func (config *DeviceConfig) Save() {
-	if rawdb.Model(&config).Where("devIdentity=? and isnull(cfgSent_At)", config.Identity).Update(&config).RowsAffected == 0 {
+	if rawdb.Model(&config).Where("devIdentity=? and isnull(cfgSent_At)", config.Identity).Updates(&config).RowsAffected == 0 {
 		rawdb.Create(&config)
 	}
 }
@@ -43,6 +46,7 @@ func (config *DeviceConfig) UpdateSentConfiguration() {
 //FindDeviceConfigByIdentity lookup not sent device configuration
 func FindDeviceConfigByIdentity(identity string) (*DeviceConfig, bool) {
 	d := &DeviceConfig{}
-	err := rawdb.Where("devIdentity=? and isnull(cfgSent_At)", identity).Find(d).RecordNotFound()
-	return d, !err
+	err := rawdb.Where("devIdentity=? and isnull(cfgSent_At)", identity).Find(d).Error
+	bErr := errors.Is(err, gorm.ErrRecordNotFound)
+	return d, !bErr
 }

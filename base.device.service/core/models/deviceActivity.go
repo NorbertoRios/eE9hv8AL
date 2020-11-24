@@ -5,6 +5,8 @@ import (
 	"time"
 
 	"queclink-go/base.device.service/report"
+
+	"gorm.io/gorm"
 )
 
 //DeviceActivity model
@@ -40,7 +42,7 @@ func (DeviceActivity) TableName() string {
 func (activity *DeviceActivity) Save() error {
 	activity.LastUpdateTime = time.Now().UTC()
 	activity.Serializedsoftware = activity.Software.Marshal()
-	db := rawdb.Model(&activity).Where("daiDeviceIdentity=?", activity.Identity).Update(&activity)
+	db := rawdb.Model(&activity).Where("daiDeviceIdentity=?", activity.Identity).Updates(&activity)
 	if db.RowsAffected == 0 {
 		db = rawdb.Create(&activity)
 	}
@@ -193,10 +195,11 @@ func (activity *DeviceActivity) unmarshal() error {
 //FindDeviceActivityInfo lookup not sent device configuration
 func FindDeviceActivityInfo(identity string) (*DeviceActivity, bool) {
 	d := &DeviceActivity{}
-	err := rawdb.Where("daiDeviceIdentity=?", identity).Find(d).RecordNotFound()
+	err := rawdb.Where("daiDeviceIdentity=?", identity).Find(d).Error
+	bErr := errors.Is(err, gorm.ErrRecordNotFound)
 	d.unmarshal()
 	if d.DTC == nil {
 		d.DTC = NewDTCCodes()
 	}
-	return d, !err
+	return d, !bErr
 }

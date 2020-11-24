@@ -8,7 +8,7 @@ import (
 )
 
 func TestVehicleInformation(t *testing.T) {
-	config.Initialize("../../config/credentials.json", &config.Configuration{})
+	err := config.Initialize("..", "/credentials.json")
 	InitializeConnections(config.Config.GetBase().MysqDeviceMasterConnectionString)
 	v := &VehicleSupport{
 		Identity:         "xirgo_123456789012345",
@@ -24,7 +24,7 @@ func TestVehicleInformation(t *testing.T) {
 		ObdDescription:   "0080",
 		UpdateTime:       time.Now().UTC(),
 	}
-	err := v.Delete()
+	err = v.Delete()
 	if err != nil {
 		t.Error("Unable to delete existing vehicle information")
 	}
@@ -43,13 +43,13 @@ func TestVehicleInformation(t *testing.T) {
 }
 
 func TestFindNonExistingVehicleInformation(t *testing.T) {
-	config.Initialize("../../config/credentials.json", &config.Configuration{})
+	err := config.Initialize("../..", "/credentials.json")
 	InitializeConnections(config.Config.GetBase().MysqDeviceMasterConnectionString)
 	v := &VehicleSupport{
 		Identity: "xirgo_123456789012345",
 		Vin:      "WASDF3234343GHR5",
 	}
-	err := v.Delete()
+	err = v.Delete()
 	if err != nil {
 		t.Error("Unable to delete existing vehicle information")
 	}
@@ -61,7 +61,7 @@ func TestFindNonExistingVehicleInformation(t *testing.T) {
 }
 
 func TestSendVinDecodeRequest(t *testing.T) {
-	config.Initialize("../../config/credentials.json", &config.Configuration{})
+	err := config.Initialize("..", "/credentials.json")
 	InitializeConnections(config.Config.GetBase().MysqDeviceMasterConnectionString)
 	v := &VehicleSupport{
 		Identity: "xirgo_123456789012345",
@@ -79,7 +79,7 @@ func TestSendVinDecodeRequest(t *testing.T) {
 }
 
 func TestVehicleInformationIsEqual(t *testing.T) {
-	config.Initialize("../../config/credentials.json", &config.Configuration{})
+	err := config.Initialize("..", "/credentials.json")
 	InitializeConnections(config.Config.GetBase().MysqDeviceMasterConnectionString)
 	v := &VehicleSupport{
 		Identity:         "xirgo_123456789012345",
@@ -95,7 +95,7 @@ func TestVehicleInformationIsEqual(t *testing.T) {
 		ObdDescription:   "0080",
 		UpdateTime:       time.Now().UTC(),
 	}
-	err := v.Delete()
+	err = v.Delete()
 	if err != nil {
 		t.Error("Unable to delete existing vehicle information")
 	}
@@ -107,7 +107,7 @@ func TestVehicleInformationIsEqual(t *testing.T) {
 }
 
 func TestVehicleSyncNewRecord(t *testing.T) {
-	config.Initialize("../../config/credentials.json", &config.Configuration{})
+	err := config.Initialize("..", "/credentials.json")
 	InitializeConnections(config.Config.GetBase().MysqDeviceMasterConnectionString)
 	v := &VehicleSupport{
 		Identity:         "xirgo_123456789012345",
@@ -123,7 +123,10 @@ func TestVehicleSyncNewRecord(t *testing.T) {
 		ObdDescription:   "0080",
 		UpdateTime:       time.Now().UTC(),
 	}
-	v.Delete()
+	err = v.Delete()
+	if err != nil {
+		t.Error("Unable to delete existing vehicle information")
+	}
 	v.Sync(v.Identity, v.Vin)
 	v1, _ := FindVehicleSupport("xirgo_123456789012345", "WASDF3234343GHR5")
 	if !v.IsEqual(v1) {
@@ -132,7 +135,7 @@ func TestVehicleSyncNewRecord(t *testing.T) {
 }
 
 func TestVehicleSyncNewVin(t *testing.T) {
-	config.Initialize("../../config/credentials.json", &config.Configuration{})
+	err := config.Initialize("..", "/credentials.json")
 	InitializeConnections(config.Config.GetBase().MysqDeviceMasterConnectionString)
 	v := &VehicleSupport{
 		Identity:         "xirgo_123456789012345",
@@ -148,7 +151,10 @@ func TestVehicleSyncNewVin(t *testing.T) {
 		ObdDescription:   "0080",
 		UpdateTime:       time.Now().UTC(),
 	}
-	v.Delete()
+	err = v.Delete()
+	if err != nil {
+		t.Error("Unable to delete existing vehicle information")
+	}
 	v.Sync(v.Identity, v.Vin)
 	v1, _ := FindVehicleSupport("xirgo_123456789012345", "WASDF3234343GHR5")
 	v1.Vin = "WASDF3234343GHR5"

@@ -7,7 +7,7 @@ import (
 )
 
 func TestDeviceConfigurationLoad(t *testing.T) {
-	err := config.Initialize("../../config/credentials.json", &config.Configuration{})
+	err := config.Initialize("..", "/credentials.json")
 	err = InitializeConnections(config.Config.GetBase().MysqDeviceMasterConnectionString)
 	if err != nil {
 		t.Error("Error establish connection:", err.Error())
@@ -20,7 +20,7 @@ func TestInvalidConfigurationLoad(t *testing.T) {
 
 		}
 	}()
-	err := config.Initialize("../../config/credentials.json", &config.Configuration{})
+	err := config.Initialize("..", "/credentials.json")
 	config.Config.GetBase().MysqDeviceMasterConnectionString = ""
 	err = InitializeConnections(config.Config.GetBase().MysqDeviceMasterConnectionString)
 	if err != nil {

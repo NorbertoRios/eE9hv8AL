@@ -43,7 +43,7 @@ func (vehicle *VehicleSupport) Save() {
 	v := &VehicleSupport{
 		Identity: vehicle.Identity,
 		Vin:      vehicle.Vin}
-	if rawdb.Model(&vehicle).Where(v).Update(map[string]interface{}{
+	if rawdb.Model(&vehicle).Where(v).Updates(map[string]interface{}{
 		"vehVin":              vehicle.Vin,
 		"vehUpdateTime":       vehicle.UpdateTime,
 		"vehObdDescription":   vehicle.ObdDescription,

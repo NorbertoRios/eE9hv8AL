@@ -7,6 +7,7 @@ import (
 
 	"queclink-go/base.device.service/report"
 	"queclink-go/base.device.service/utils"
+
 	"github.com/go-sql-driver/mysql"
 )
 
