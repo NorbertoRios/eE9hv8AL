@@ -5,6 +5,7 @@ import (
 	"log"
 	"time"
 
+	"gorm.io/gorm"
 	"queclink-go/base.device.service/report"
 	"queclink-go/base.device.service/utils"
 
@@ -36,21 +37,23 @@ type MessageHistory struct {
 	Relay           byte      `gorm:"column:Relay"`
 }
 
-//TableName for DeviceActivity model
-func (h *MessageHistory) TableName() string {
-	tableName := GetMessageHistoryTableName(h.DevID)
-	return "raw_data." + tableName
+//MessageHistoryTable ...
+func MessageHistoryTable(h *MessageHistory) func(tx *gorm.DB) *gorm.DB {
+	return func(tx *gorm.DB) *gorm.DB {
+		tableName := "raw_data." + GetMessageHistoryTableName(h.DevID)
+		return tx.Table(tableName)
+	}
 }
 
 //Save message to raw history table
 func (h *MessageHistory) save() (uint64, error) {
-	err := rawdb.Create(h).Error
+	err := rawdb.Scopes(MessageHistoryTable(h)).Create(h).Error
 	if err != nil {
 		merr, ok := err.(*mysql.MySQLError)
 		if ok && merr.Number == 1146 {
 			cerr := CreateMessageHistoryTable(GetMessageHistoryTableName(h.DevID))
 			if cerr == nil {
-				err = rawdb.Create(h).Error
+				err = rawdb.Scopes(MessageHistoryTable(h)).Create(h).Error
 			}
 		}
 	}
