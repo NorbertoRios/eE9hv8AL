@@ -7,8 +7,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/streadway/amqp"
 	"queclink-go/base.device.service/rabbit"
+
+	"github.com/streadway/amqp"
 
 	"queclink-go/base.device.service/config"
 	"queclink-go/base.device.service/report"
@@ -384,7 +385,8 @@ func (device *Device) PublishMessage(message report.IMessage) error {
 	herr := device.saveMessageHistory(message)
 	aerr := device.Self.SaveActivity(message)
 	if herr != nil || aerr != nil {
-		log.Fatalf("[PublishMessage | Save history] Error : %v ", herr)
+		jMessage, _ := json.Marshal(message)
+		log.Fatalf("[PublishMessage | Save history] Error : %v. Message: %v", herr, string(jMessage))
 		return herr
 	}
 	if aerr != nil {
