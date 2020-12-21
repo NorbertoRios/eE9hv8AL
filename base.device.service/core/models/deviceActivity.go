@@ -50,43 +50,43 @@ func (activity *DeviceActivity) Save() error {
 }
 
 //BeforeUpdate prepare DeviceActivity for save
-func (activity *DeviceActivity) BeforeUpdate() (err error) {
+func (activity *DeviceActivity) BeforeUpdate(tx *gorm.DB) (err error) {
 	activity.Serializedsoftware = activity.Software.Marshal()
 	return nil
 }
 
 //BeforeCreate prepare DeviceActivity for save
-func (activity *DeviceActivity) BeforeCreate() (err error) {
-	activity.BeforeUpdate()
+func (activity *DeviceActivity) BeforeCreate(tx *gorm.DB) (err error) {
+	activity.BeforeUpdate(tx)
 	return nil
 }
 
 //BeforeSave prepare DeviceActivity for save
-func (activity *DeviceActivity) BeforeSave() (err error) {
-	activity.BeforeUpdate()
+func (activity *DeviceActivity) BeforeSave(tx *gorm.DB) (err error) {
+	activity.BeforeUpdate(tx)
 	return nil
 }
 
 //AfterUpdate unmarshal string to struct
-func (activity *DeviceActivity) AfterUpdate() (err error) {
-	activity.AfterFind()
+func (activity *DeviceActivity) AfterUpdate(tx *gorm.DB) (err error) {
+	activity.AfterFind(tx)
 	return nil
 }
 
 //AfterSave unmarshal string to struct
-func (activity *DeviceActivity) AfterSave() (err error) {
-	activity.AfterFind()
+func (activity *DeviceActivity) AfterSave(tx *gorm.DB) (err error) {
+	activity.AfterFind(tx)
 	return nil
 }
 
 //AfterCreate unmarshal string to struct
-func (activity *DeviceActivity) AfterCreate() (err error) {
-	activity.AfterFind()
+func (activity *DeviceActivity) AfterCreate(tx *gorm.DB) (err error) {
+	activity.AfterFind(tx)
 	return nil
 }
 
 //AfterFind unmarshal string to struct
-func (activity *DeviceActivity) AfterFind() (err error) {
+func (activity *DeviceActivity) AfterFind(tx *gorm.DB) (err error) {
 	activity.Software, _ = UnMarshalSoftware(activity.Serializedsoftware)
 	return nil
 }
